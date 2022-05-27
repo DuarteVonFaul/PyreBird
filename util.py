@@ -17,6 +17,8 @@ def Type_column(argument):
        case 37  : return 'VARCHAR',
 
 
+
+
 from enum import Enum
 
 class Permission(Enum):
