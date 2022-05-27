@@ -1,36 +1,38 @@
-'''import firebirdsql
-
-conn = firebirdsql.connect(  user='SYSDBA', 
-                            password='masterkey', 
-                            database='C:/Users/Estagiario-03/Desktop/GitHub/SGEHeroku/SGENFCE.FDB',
-                            host='localhost',
-                            charset='ANSI')
-
-cur = conn.cursor()
-
-cur.execute('select * from TB_Prod')
-
-for c in cur.fetchall():
-    print("Produto:")
-    print(c)
-conn.close()'''
-
-
-
-
-
 from database   import MySession
-from pybird     import Select,auto_map,create_object
+from pybird     import Select,auto_map,create_object,Insert
 from product    import productTabel
+from util       import Permission
 
 # Execute the SELECT statement:
 
+userAcess = Permission.SUPORTE.value
 
+model = auto_map(MySession,'TB_OPERAD')
 
-model = auto_map(MySession,'TB_PROD')
-query = Select(MySession, 'TB_PROD','*').filter("PRD_NOME = 'BIFE DO VAZIO CONG BOVINO PACU'").execute()
+print(Insert(MySession,'TB_OPERAD').tableModel(model).valuesTable(" 438," + 
+                                                            "'Duarte'," + 
+                                                            "'1234',"+
+                                                            f"'{userAcess.get('OP_PDES')}',"+
+                                                            f"'{userAcess.get('OP_ACRE')}',"+
+                                                            f"'{userAcess.get('OP_CANC')}',"+
+                                                            f"'{userAcess.get('OP_INID')}',"+
+                                                            f"'{userAcess.get('OP_GAVT')}',"+
+                                                            f"'{userAcess.get('OP_LEIX')}',"+
+                                                            f"'{userAcess.get('OP_FIMD')}',"+
+                                                            f"'{userAcess.get('OP_SANG')}',"+
+                                                            f"'{userAcess.get('OP_RECB')}',"+
+                                                            f"'{userAcess.get('OP_TOTA')}',"+
+                                                            f"'{userAcess.get('OP_CANCCP')}',"+
+                                                            f"'{userAcess.get('OP_ALTPREC')}',"+
+                                                            f"'{userAcess.get('OP_CDUS')}',"+
+                                                            f"{int(userAcess.get('OP_IDCNT'))},"+
+                                                            f"NULL,"+
+                                                            f"'{userAcess.get('OP_CONFIG')}',"+
+                                                            f"'{userAcess.get('OP_LIBCLI')}',"+
+                                                            f"{float(userAcess.get('OP_DESCONTO'))}").return_query())
+'''query = Select(MySession, 'TB_OPERAD','*').filter("OP_SENHA = '987654'").execute()
 
 create_object(model,query,productTabel)
 
 for obj in productTabel.List:
-    print('PRD_NOME' + ':' + obj[str('PRD_NOME')] + '  PRD_CODI' + ':' + obj[str('PRD_CODI')])
+    print('OP_CODI' + ':' + obj[str('OP_CODI')] + '  OP_DESC' + ':' + obj[str('OP_DESC')])'''

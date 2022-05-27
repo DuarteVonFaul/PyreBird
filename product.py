@@ -1,13 +1,8 @@
 
-from typing import List
+from pybird import BasicModel
 
 
-class ProductTabel():
-
-    def __init__(self):
-        self.Model = {'test':23}
-        self.List = []
-        pass
-
+class ProductTabel(BasicModel):
+    pass
 
 productTabel = ProductTabel()
