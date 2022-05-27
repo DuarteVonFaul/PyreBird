@@ -1,10 +1,12 @@
 
-class ProductTabel():
-    productModel:dict
-    productList:list
+from typing import List
 
-    def __init__(self) -> None:
-        self.productModel = {'test':'23'}
+
+class ProductTabel():
+
+    def __init__(self):
+        self.Model = {'test':23}
+        self.List = []
         pass
 
 

@@ -20,7 +20,7 @@ conn.close()'''
 
 
 from database   import MySession
-from pybird     import Select,auto_map
+from pybird     import Select,auto_map,create_object
 from product    import productTabel
 
 # Execute the SELECT statement:
@@ -28,16 +28,9 @@ from product    import productTabel
 
 
 model = auto_map(MySession,'TB_PROD')
-query = Select(MySession, 'TB_PROD','*').filter("PRD_CODR = '00007'").execute()
+query = Select(MySession, 'TB_PROD','*').filter("PRD_NOME = 'BIFE DO VAZIO CONG BOVINO PACU'").execute()
 
-for item in query:
-    i = 0
-    for  campo in item:
-        aux = model[i]
-        productTabel.productModel[str(aux[0]).strip()] = str(campo)
-        i = i + 1
+create_object(model,query,productTabel)
 
-for item in productTabel.productModel:
-    print(item + ": "+ productTabel.productModel[item])
-
-
+for obj in productTabel.List:
+    print('PRD_NOME' + ':' + obj[str('PRD_NOME')] + '  PRD_CODI' + ':' + obj[str('PRD_CODI')])

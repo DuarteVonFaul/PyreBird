@@ -1,4 +1,3 @@
-from calendar import c
 import fdb
 from typing              import List
 
@@ -22,6 +21,17 @@ def auto_map(con,table):
         cur = con.cursor()
         cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{table}' ORDER BY r.RDB$FIELD_POSITION")
         return cur.fetchall()
+
+def create_object(model,query,obj):
+    for item in query:
+        i = 0
+        obj.Model = {'test':23}
+        for  campo in item:
+            aux = model[i]
+            obj.Model[str(str(aux[0]).strip())] = str(campo)
+            i = i + 1
+        obj.List.append(obj.Model)
+
 
 
 class Select():
@@ -57,7 +67,6 @@ class Select():
         self.cur = self.con.cursor()
         self.cur.execute(self.SQL)
         return self.cur.fetchall()
-
 
 
 
