@@ -53,7 +53,8 @@ def auto_map(con):
             tablelist.append(str(c[0]).strip())
         for table in tablelist:
             cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{table}' ORDER BY r.RDB$FIELD_POSITION")
-            listclass[str(table).strip()] = BasicModel(cur.fetchall())
+            listclass[str(table).strip()] = BasicModel(cur.fetchall(),table)
+
         return listclass
 
 '''def create_object(model,query,obj):
@@ -70,7 +71,8 @@ def auto_map(con):
 
 #Modelos
 class BasicModel():
-    def __init__(self,list):
+    def __init__(self,list, raiz):
+        setattr(self,'root',raiz)
         for  attr in list:
             setattr(self,str(attr[0]).strip(),None)
         pass
@@ -81,9 +83,9 @@ class BasicModel():
 class Select():
     SQL : str
 
-    def __init__(self,con, table:str, filter_column:str):
-        self.table = table
-        self.SQL = f'SELECT {filter_column}  FROM  {self.table}'
+    def __init__(self,con, obj, filter_column:str):
+        self.table = obj
+        self.SQL = f'SELECT {filter_column}  FROM  {self.table.root}'
         self.con = con
     
     def filter(self, conditions:str):
@@ -96,8 +98,17 @@ class Select():
     
     def execute(self):
         self.cur = self.con.cursor()
+        self.cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{self.table.root}' ORDER BY r.RDB$FIELD_POSITION")
+        self.listattr = self.cur.fetchall()
         self.cur.execute(self.SQL)
-        return self.cur.fetchall()
+        self.listcampo = self.cur.fetchall()
+        return self
+        
+    def scalar(self):
+        i = 0
+        for attr in self.listattr:
+            setattr(self.table,(str(attr[0]).split())[0],Type_column(attr[1],(self.listcampo[0])[i]))
+            i = 1 + i
 
 
 class Insert():

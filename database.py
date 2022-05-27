@@ -1,4 +1,4 @@
-from pybird import Create_Session
+from pybird import Create_Session,auto_map
 
 
 
@@ -16,3 +16,4 @@ class DataBase():
 
 myBase = DataBase()
 MySession = myBase.create_session()
+Base = auto_map(MySession)

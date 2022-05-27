@@ -1,6 +1,4 @@
+from database import Base
 
-from pybird import BasicModel
 
-
-class ProductTabel(BasicModel):
-    pass
+productTable = Base['TB_PROD']
