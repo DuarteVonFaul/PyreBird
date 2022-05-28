@@ -9,7 +9,7 @@ class DataBase():
         pass
 
     def create_session(self):
-        return Create_Session(  dsn='F:/GITHUB/sge-totem/SGENFCE.FDB',
+        return Create_Session(  dsn='C:/Users/Estagiario-03/Desktop/GitHub/SGEHeroku/SGENFCE.FDB',
                                 user='sysdba',password='masterkey',
                                 charset='ANSI')
 

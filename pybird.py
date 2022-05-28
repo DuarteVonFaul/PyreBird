@@ -1,61 +1,7 @@
 import fdb
-from typing              import List
+from utils               import Type_column,para_dict
 
-#Utils
-
-def para_dict(obj):
-    # Se for um objeto, transforma num dict
-    if hasattr(obj, '__dict__'):
-        obj = obj.__dict__
-
-    # Se for um dict, lê chaves e valores; converte valores
-    if isinstance(obj, dict):
-        return { k:para_dict(v) for k,v in obj.items() }
-    # Se for uma lista ou tupla, lê elementos; também converte
-    elif isinstance(obj, list) or isinstance(obj, tuple):
-        return [para_dict(e) for e in obj]
-    # Se for qualquer outra coisa, usa sem conversão
-    else: 
-        return obj
-
-
-def Type_column(argument,campo):
-    match argument:
-       case 261     : return confirmString(campo)#'BLOB',
-       case 14      : return confirmString(campo)#'CHAR'
-       case 40      : return confirmString(campo)#'CSTRING'
-       case 11      : return confirmFloat(campo)#'D_FLOAT'
-       case 27      : return confirmFloat(campo)#'DOUBLE'
-       case 10      : return confirmFloat(campo)#'FLOAT'
-       case 16      : return confirmFloat(campo)#'Numeric' - Decimal
-       case 8       : return confirmInt(campo)#'INTEGER'
-       case 9       : return confirmString(campo)#'QUAD',
-       case 7       : return confirmInt(campo)#'SMALLINT'
-       case 12      : return confirmString(campo)#'DATE',
-       case 13      : return confirmString(campo)#'TIME',
-       case 35      : return confirmString(campo)#'TIMESTAMP',
-       case 37      : return confirmString(campo)#'VARCHAR'
-       case default : return confirmString("Algo de errado não está certo")
-
-def confirmInt(campo):
-    try:
-        return int(campo)
-    except:
-        return None
-    
-def confirmFloat(campo):
-    try:
-        return float(campo)
-    except:
-        return None
-
-def confirmString(campo):
-    try:
-        return str(campo)
-    except:
-        return None
-
-#Gerenciamento do Banco
+#Funcionalidades ORM
 def Create_Session( dsn:str,user:str,password:str,charset:str):
     con = fdb.connect(dsn=dsn, user=user, password=password, charset=charset)
     return con
@@ -75,8 +21,8 @@ def auto_map(con):
 
 #Modelos
 class BasicModel():
-    def __init__(self,list, raiz):
-        setattr(self,'root',raiz)
+    def __init__(self,list, root):
+        setattr(self,'root',root)
         for  attr in list:
             setattr(self,str(attr[0]).strip(),None)
         pass
@@ -91,13 +37,18 @@ class Model():
 class Select():
     SQL : str
 
-    def __init__(self,con, obj, filter_column:str):
+    def __init__(self,con, obj, filter_column='*'):
         self.table = obj
         self.SQL = f'SELECT {filter_column}  FROM  {self.table.root}'
         self.con = con
     
-    def filter(self, conditions:str):
-        query = f"{self.SQL} WHERE  {conditions}"
+    def filter_by(self, **kwargs):
+        query = f"{self.SQL} WHERE"
+        for key, value in kwargs.items():
+            if(type(value) == str):
+                query = query +  f" {key} = '{value}'"
+            else:
+                query = query +  f" {key} = {value}"
         self.SQL = query
         return self
 
@@ -140,27 +91,99 @@ class Select():
 class Insert():
     SQL:str
 
-    def __init__(self,con, table:str):
+    def __init__(self,con, table):
         self.table = table
-        self.SQL = f'INSERT INTO  {self.table} ('
+        self.SQL = f'INSERT INTO  {self.table.root}'
         self.con = con
     
-    def tableModel(self,modeltable):
+    def values(self, **kwargs):
         i = 0
-        for model in modeltable:
+        SQLVALUE = ''
+        SQLINTO = ''
+        for key, value in kwargs.items():
             if i > 0:
-                self.SQL = self.SQL + f" ,{str(model[0]).strip()}"
+                SQLINTO = SQLINTO  + f", {key}"
+                if(type(value) == str):
+                    SQLVALUE = SQLVALUE  + f", '{value}'"
+                else:
+                    SQLVALUE = SQLVALUE  + f", {value}"
             else:
-                self.SQL = self.SQL + f" {str(model[0]).strip()}"
+                SQLINTO = SQLINTO  + f" ( {key}"
+                if(type(value) == str):
+                    SQLVALUE = SQLVALUE  + f"( '{value}'"
+                else:
+                    SQLVALUE = SQLVALUE  + f"( {value}"    
             i = i + 1
-        self.SQL = self.SQL + ')'
+        SQLVALUE = SQLVALUE + ' )'
+        SQLINTO = SQLINTO + ' )'
+        self.SQL = f'{self.SQL} {SQLINTO} VALUES {SQLVALUE}'
 
 
         return self
         
     
-    def valuesTable(self,values:str):
-        self.SQL = self.SQL +f" VALUES ({values});"
+    def return_query(self):
+        return self.SQL
+    
+    def execute(self):
+        self.cur = self.con.cursor()
+        self.cur.execute(self.SQL)
+        self.con.commit()
+
+
+class Delete():
+    SQL:str
+
+    def __init__(self,con, table, filter_column='*'):
+        self.table = table
+        self.SQL = f'DELETE {filter_column} INTO  {self.table.root}'
+        self.con = con
+    
+    def filter_by(self, **kwargs):
+        query = f"{self.SQL} WHERE"
+        for key, value in kwargs.items():
+            if(type(value) == str):
+                query = query +  f" {key} = '{value}'"
+            else:
+                query = query +  f" {key} = {value}"
+        self.SQL = query
+        return self
+    
+    def return_query(self):
+        return self.SQL
+    
+    def execute(self):
+        self.cur = self.con.cursor()
+        self.cur.execute(self.SQL)
+        self.con.commit()
+
+    
+class Update():
+    SQL:str
+
+    def __init__(self,con, table, filter_column='*'):
+        self.table = table
+        self.SQL = f'UPDATE {self.table.root}'
+        self.con = con
+    
+    def setUpdate(self, **kwargs):
+        query = f"{self.SQL} SET"
+        for key, value in kwargs.items():
+            if(type(value) == str):
+                query = query +  f" {key} = '{value}'"
+            else:
+                query = query +  f" {key} = {value}"
+        self.SQL = query
+        return self
+
+    def filter_by(self, **kwargs):
+        query = f"{self.SQL} WHERE"
+        for key, value in kwargs.items():
+            if(type(value) == str):
+                query = query +  f" {key} = '{value}'"
+            else:
+                query = query +  f" {key} = {value}"
+        self.SQL = query
         return self
     
     def return_query(self):
