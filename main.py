@@ -1,9 +1,15 @@
-from database   import MySession
+from database   import MySession, Base
 from pybird     import Select,Insert
-
+import json
 from product    import productTable
 
 
-Select(MySession,productTable,'*').filter("PRD_CODR = '00001'").execute().scalar()
+query = Select(MySession,productTable,'*').filter("PRD_CODR = '28600'").all()
 
-print(type(productTable.PRD_PREC))
+
+
+
+
+
+print(query)
+

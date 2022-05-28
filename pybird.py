@@ -3,6 +3,22 @@ from typing              import List
 
 #Utils
 
+def para_dict(obj):
+    # Se for um objeto, transforma num dict
+    if hasattr(obj, '__dict__'):
+        obj = obj.__dict__
+
+    # Se for um dict, lê chaves e valores; converte valores
+    if isinstance(obj, dict):
+        return { k:para_dict(v) for k,v in obj.items() }
+    # Se for uma lista ou tupla, lê elementos; também converte
+    elif isinstance(obj, list) or isinstance(obj, tuple):
+        return [para_dict(e) for e in obj]
+    # Se for qualquer outra coisa, usa sem conversão
+    else: 
+        return obj
+
+
 def Type_column(argument,campo):
     match argument:
        case 261     : return confirmString(campo)#'BLOB',
@@ -57,24 +73,16 @@ def auto_map(con):
 
         return listclass
 
-'''def create_object(model,query,obj):
-    for item in query:
-        i = 0
-        obj.Model = {'test':23}
-        for  campo in item:
-            aux = model[i]
-            #obj.Model[str(str(aux[0]).strip())] = Type_column(aux[1],campo)
-            obj.Model[str(str(aux[0]).strip())] = Type_column(aux[1],campo)
-            i = i + 1
-        obj.Model.pop('test')
-        obj.List.append(obj.Model)'''
-
 #Modelos
 class BasicModel():
     def __init__(self,list, raiz):
         setattr(self,'root',raiz)
         for  attr in list:
             setattr(self,str(attr[0]).strip(),None)
+        pass
+
+class Model():
+    def __init__(self) -> None:
         pass
 
 
@@ -95,20 +103,38 @@ class Select():
 
     def return_query(self):
         return self.SQL
-    
-    def execute(self):
+        
+    def scalar(self):
         self.cur = self.con.cursor()
         self.cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{self.table.root}' ORDER BY r.RDB$FIELD_POSITION")
         self.listattr = self.cur.fetchall()
         self.cur.execute(self.SQL)
-        self.listcampo = self.cur.fetchall()
-        return self
-        
-    def scalar(self):
+        self.listObj = self.cur.fetchone()
         i = 0
         for attr in self.listattr:
-            setattr(self.table,(str(attr[0]).split())[0],Type_column(attr[1],(self.listcampo[0])[i]))
+            setattr(self.table,(str(attr[0]).split())[0],Type_column(attr[1],(self.listObj)[i]))
             i = 1 + i
+        return para_dict(self.table)
+        
+    def all(self):
+        self.cur = self.con.cursor()
+        self.cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{self.table.root}' ORDER BY r.RDB$FIELD_POSITION")
+        self.listattr = self.cur.fetchall()
+        self.cur.execute(self.SQL)
+        self.listObj = self.cur.fetchall()
+
+        list = []
+        j = 0
+        for obj in self.listObj:
+            Obj = Model()
+            j = j + 1
+            i = 0
+            for attr in self.listattr:
+                setattr(Obj,str((str(attr[0]).split())[0]),Type_column(attr[1],obj[i]))
+                i = 1 + i
+            list.append(Obj)
+            
+        return para_dict(list)
 
 
 class Insert():
