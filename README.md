@@ -12,7 +12,7 @@ Uma experiencia de desenvolvimento de uma ORM para FireBird em Python
 
   * **Automap**
       * Faz mapeamento de todo o banco, de uma lista de tabelas, ou de uma tabela especifica
-      * retorna esse mapeamento como uma classe
+      * retorna esse mapeamento como um schema
       
   * **Session**
       * Cria uma sessão de conexão com o banco
