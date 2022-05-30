@@ -6,7 +6,6 @@ uma vez que algumas funcionalidades são mais urgentes em relação a outras
 
 Versão 0.1
 ----------
-
 - automap das tabelas do Banco
 - conexão ao banco de dados firebird
 
@@ -19,7 +18,6 @@ Versão 0.2
 
 Versão 0.3
 ----------
-
 - Criação de Tabela(s)(A partir de um Objeto)
 - atualizar campo da(s) Tabela(s)
 - deletar tabela(s)
