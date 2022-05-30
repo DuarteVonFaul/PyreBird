@@ -1,0 +1,24 @@
+PLANEJAMENTO
+============
+
+Este documento tem como propósito estabelecer as metas para as versões da biblioteca,
+uma vez que algumas funcionalidades são mais urgentes em relação a outras
+
+Versão 0.1
+----------
+
+- automap das tabelas do Banco
+- conexão ao banco de dados firebird
+- CRUD basico
+
+Versão 0.2
+----------
+
+- gerar objetos apartir das tabelas mapeadas
+- retorno das informações em dict
+- converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
+
+Versão 0.3
+----------
+
+- Ainda não definido

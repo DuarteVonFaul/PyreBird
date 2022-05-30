@@ -1,0 +1,12 @@
+Sobre os autores deste e outros créditos
+========================================
+
+O PyBird foi criado por Guilherme Duarte Sousa <duartevonfaul at gmail.com> e seu
+desenvolvimento começou inicial para contornar um problema de conexão a banco de 
+dados firebird utilizando a ORM SQLAlchemy
+
+O PyBird Utiliza o fdb==2.0.2 como base geral do PyBird já que a inteção do PyBird
+é facilitar e automatizar requisições e commit's a um banco de dados FireBird
+
+A estrutura das funcionalidades do PyBird foi baseadas no SQLAlchemy para permitir
+uma melhor adaptação a biblioteca que é extremamente nova.
