@@ -1,4 +1,4 @@
 from database import Base
 
 
-productTable = Base['TB_PROD']
+productTable = Base.get_class('TB_PROD')

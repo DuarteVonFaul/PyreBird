@@ -1,4 +1,4 @@
-def para_dict(obj):
+def dict(obj):
     # Se for um objeto, transforma num dict
     if hasattr(obj, '__dict__'):
         obj = obj.__dict__
@@ -14,7 +14,7 @@ def para_dict(obj):
         return obj
 
 
-def Type_column(argument,campo):
+def column(argument,campo):
     match argument:
        case 261     : return confirmString(campo)#'BLOB',
        case 14      : return confirmString(campo)#'CHAR'

@@ -1,6 +1,7 @@
 import fdb
-from utils.utils import Type_column,para_dict
-from models.basic import Model
+
+from pybird.utils.convertType import column,dict
+from pybird.models.model import Model
 
 class Select():
     SQL : str
@@ -31,9 +32,9 @@ class Select():
         self.listObj = self.cur.fetchone()
         i = 0
         for attr in self.listattr:
-            setattr(self.table,(str(attr[0]).split())[0],Type_column(attr[1],(self.listObj)[i]))
+            setattr(self.table,(str(attr[0]).split())[0],column(attr[1],(self.listObj)[i]))
             i = 1 + i
-        return para_dict(self.table)
+        return dict(self.table)
         
     def all(self):
         self.cur = self.con.cursor()
@@ -49,11 +50,11 @@ class Select():
             j = j + 1
             i = 0
             for attr in self.listattr:
-                setattr(Obj,str((str(attr[0]).split())[0]),Type_column(attr[1],obj[i]))
+                setattr(Obj,str((str(attr[0]).split())[0]),column(attr[1],obj[i]))
                 i = 1 + i
             list.append(Obj)
             
-        return para_dict(list)
+        return dict(list)
 
 
 class Insert():
