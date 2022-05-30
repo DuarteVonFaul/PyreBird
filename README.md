@@ -4,7 +4,7 @@
 ![status](https://img.shields.io/badge/status-unstable-red.svg)![pyversions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)
 
 Uma experiencia de desenvolvimento de uma ORM para FireBird em Python
-**Versões FireBird**
+- **Versões FireBird**
   - 2.5.9(Unica testada)
   
 
