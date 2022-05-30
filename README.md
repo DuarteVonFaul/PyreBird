@@ -14,13 +14,13 @@ O projeto está organizado nos seguintes arquivos:
 ## 2. Como Usar:
   - **Connection**
           
-          from pybird import Create_Session
+          from pybird.orm.session     import Create_Session
           
           conn = Create_Session(  dsn='path/to/DATA.FDB',user='user',password='pass',charset='ANSI') 
           
   - **Select**
- 
-           from pybird import Select
+         
+           from pybird.crud    import Select
            
            #Aqui ele retorna o primeiro item que retornar na requisição
            Select(conn,'Nome_da_Tabela').scalar()
