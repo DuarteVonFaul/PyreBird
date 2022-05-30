@@ -9,11 +9,10 @@ Versão 0.1
 
 - automap das tabelas do Banco
 - conexão ao banco de dados firebird
-- CRUD basico
 
 Versão 0.2
 ----------
-
+- CRUD basico
 - gerar objetos apartir das tabelas mapeadas
 - retorno das informações em dict
 - converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
