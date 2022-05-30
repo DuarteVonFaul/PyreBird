@@ -14,10 +14,13 @@ Versão 0.2
 ----------
 - CRUD basico
 - gerar objetos apartir das tabelas mapeadas
-- retorno das informações em dict
+- retorno das informações em dict ou objeto
 - converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
 
 Versão 0.3
 ----------
 
-- Ainda não definido
+- Criação de Tabela(s)(A partir de um Objeto)
+- atualizar campo da(s) Tabela(s)
+- deletar tabela(s)
+
