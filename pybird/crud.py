@@ -1,6 +1,4 @@
-import fdb
-
-from pybird.utils.convertType import column,dict
+from pybird.utils.convertType import column,to_dict
 from pybird.models.model import Model
 
 class Select():
@@ -26,20 +24,17 @@ class Select():
         
     def scalar(self):
         self.cur = self.con.cursor()
-        self.cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{self.table.root}' ORDER BY r.RDB$FIELD_POSITION")
-        self.listattr = self.cur.fetchall()
         self.cur.execute(self.SQL)
         self.listObj = self.cur.fetchone()
         i = 0
-        for attr in self.listattr:
-            setattr(self.table,(str(attr[0]).split())[0],column(attr[1],(self.listObj)[i]))
+        Obj = Model()
+        for attr in self.table.map:
+            setattr(Obj,attr,column(self.table.map[attr],(self.listObj)[i]))
             i = 1 + i
-        return dict(self.table)
+        return to_dict(Obj)
         
     def all(self):
         self.cur = self.con.cursor()
-        self.cur.execute(f" SELECT r.RDB$FIELD_NAME AS nome, f.RDB$FIELD_TYPE AS tipo FROM RDB$RELATION_FIELDS r LEFT JOIN RDB$FIELDS f ON r.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME WHERE r.RDB$RELATION_NAME='{self.table.root}' ORDER BY r.RDB$FIELD_POSITION")
-        self.listattr = self.cur.fetchall()
         self.cur.execute(self.SQL)
         self.listObj = self.cur.fetchall()
 
@@ -49,12 +44,12 @@ class Select():
             Obj = Model()
             j = j + 1
             i = 0
-            for attr in self.listattr:
-                setattr(Obj,str((str(attr[0]).split())[0]),column(attr[1],obj[i]))
+            for attr in self.table.map:
+                setattr(Obj,attr,column(self.table.map[attr],obj[i]))
                 i = 1 + i
             list.append(Obj)
             
-        return dict(list)
+        return to_dict(list)
 
 
 class Insert():

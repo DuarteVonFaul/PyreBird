@@ -1,4 +1,5 @@
 from pybird.models.basicmodel import BasicModel
+import copy
 
 
 class auto_map():
@@ -37,7 +38,7 @@ class auto_map():
 
     
     def get_class(self,classe:str):
-        return self.classes[classe]
+        return copy.copy(self.classes[classe])
 
     def classes_keys(self):
         for clss in self.classes:
