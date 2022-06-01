@@ -41,5 +41,7 @@ class auto_map():
         return copy.copy(self.classes[classe])
 
     def classes_keys(self):
+        string = ""
         for clss in self.classes:
-            print(clss)
+            string = str(string) + " " + str(clss)
+        return string
