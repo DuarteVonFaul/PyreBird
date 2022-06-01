@@ -18,9 +18,9 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
   * **Session**
       * Cria uma sessão de conexão com o banco
 
-  * **CRUD**
+  * **PyBird**
       * Faz as requisições basicas no banco (Select, Insert, Update e Delete)
-      * retorna o Select em formato de Dict
+      * retorna o Select em formato de Objeto
       * converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
       * retorna a query em formato de str
    
