@@ -41,7 +41,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
           
   - **Select**
          
-           from pybird.crud    import Select
+           from pybird.select    import Select
            
            #Aqui ele retorna o primeiro item que retornar na requisição
            Select(conn,'Nome_da_Tabela').scalar()
