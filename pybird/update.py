@@ -5,12 +5,12 @@
 class Update():
     SQL:str
 
-    def __init__(self,con, table, filter_column='*'):
+    def __init__(self,con, table):
         self.table = table
         self.SQL = f'UPDATE {self.table.root}'
         self.con = con
     
-    def setUpdate(self, **kwargs):
+    def set(self, **kwargs):
         query = f"{self.SQL} SET"
         for key, value in kwargs.items():
             if(type(value) == str):
