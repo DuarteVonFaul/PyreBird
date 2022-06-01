@@ -1,3 +1,12 @@
+def refactureArgs(args):
+    aux = str(args[0])
+    i = 1
+    while i < len(args):
+        aux += f', {args[i]}'
+        i += 1
+    return aux
+
+
 def to_dict(obj):
     # Se for um objeto, transforma num dict
     if hasattr(obj, '__dict__'):
@@ -14,7 +23,7 @@ def to_dict(obj):
         return obj
 
 
-def column(argument,campo):
+def to_type(argument,campo):
     match argument:
        case 261     : return confirmString(campo)#'BLOB',
        case 14      : return confirmString(campo)#'CHAR'
