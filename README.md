@@ -38,17 +38,25 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
           from pybird.orm.session     import Create_Session
           
           conn = Create_Session(  dsn='path/to/DATA.FDB',user='user',password='pass',charset='ANSI') 
+  - **AutoMap**
+    
+    O AutoMap tem como funcionalidade Mapear as tabelas e criar schemas para serem usados nas consultas e nas criações de Objetos.
+    
+    Logo abaixo temos as funcionalidades Basicas do AutoMap
+          from pybird.orm.ext.automap     import auto_map
+          
+          #Retorna o mapeamento de todas as tabelas
+          Base = auto_map(conn).all()
+          
+          #Retorna o mapeamento de tabelas especificas
+          Base = auto_map(conn).filter_by(['TB_PRODUTO','TB_VENDA','TB_PAGAMENTO'])
+          
+          #Recebe todo o schema da tabela produto
+          ProdutoTabela = Base.get_class('TB_PRODUTO')
           
   - **Select**
          
            from pybird.select    import Select
            
-           #Aqui ele retorna o primeiro item que retornar na requisição
-           Select(conn,'Nome_da_Tabela').only()
-           #Aqui ele retorna todos os itens que retornar na requisição
-           Select(conn,'Nome_da_Tabela').all()
-           #Aqui ele retorna o(s) itens filtrando pelos campos desejados
-           Select(conn,'Nome_da_Tabela').filter_by( NOME_DA_COLUNA = VALOR).all()
-           #Aqui ele retorna a query criada pela funcionalidade
-           Select(conn,'Nome_da_Tabela').filter_by( NOME_DA_COLUNA = VALOR).return_query()
+           
         
