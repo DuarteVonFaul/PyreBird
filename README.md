@@ -73,7 +73,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
     - *orden_by('coluna1',..., Keyword = "Asc" )* retorna em ordem crescente
     - *return_query()* retorna a SQLQuery em formato String
     
-    abaixo vemos alguns exemplos de como utilizar o Select
+    abaixo temos alguns exemplos de como utilizar o Select
          
            from pybird.select    import Select
            
