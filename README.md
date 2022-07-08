@@ -58,7 +58,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
           
   - **Select**
    
-    O Select tem varias funcionalidades intrínsecas o modelo basico para utilizar o Select é o seguinte
+    O Select tem varias funcionalidades intrínsecas a ela e o modelo basico para utilizar o Select é o seguinte
     
     *Select(Sessão,SchemaTabela,"Filtro de Campos").all()*
     
