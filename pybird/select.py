@@ -47,7 +47,7 @@ class Select(Base):
         self.SQL = query
         return self
 
-        #Metodo Orden By
+    #Metodo Orden By
     def orden_by(self,*args, Keyword = "Desc"):
         query = f"{self.SQL} ORDER BY"
         self.SQL = query +f" {refactureArgs(args)} "+ Keyword

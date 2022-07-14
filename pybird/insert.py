@@ -1,8 +1,3 @@
-
-
-
-
-
 class Insert():
     SQL:str
 
