@@ -3,7 +3,7 @@ class Insert():
 
     def __init__(self,con, table):
         self.table = table
-        self.SQL = f'INSERT INTO  {self.table.root}'
+        self.SQL = f'INSERT INTO  "{self.table.root}" '
         self.con = con
     
     def values(self, **kwargs):
@@ -36,7 +36,6 @@ class Insert():
         return self.SQL
     
     def execute(self):
-        print(self.SQL)
         self.cur = self.con.cursor()
         self.cur.execute(self.SQL)
         self.con.commit()
