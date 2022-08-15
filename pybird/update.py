@@ -27,6 +27,13 @@ class Update():
         self.SQL = query
         return self
     
+    def is_null(self, field):
+
+        query += f"{self.SQL} WHERE {field} is null"
+
+        self.SQL = query
+        return self
+    
     def return_query(self):
         return self.SQL
     

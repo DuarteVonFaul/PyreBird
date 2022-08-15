@@ -1,0 +1,14 @@
+{'Tables':[
+{'TB_USER': [
+{'id': 'INTEGER', 'PrimaryKey': True, 'NotNUll': True},
+{'name': 'VARCHAR(10)', 'PrimaryKey': False, 'NotNUll': False},
+]},
+{'TB_PRODUCT': [
+{'id': 'INTEGER', 'PrimaryKey': True, 'NotNUll': True},
+{'name': 'VARCHAR(10)', 'PrimaryKey': False, 'NotNUll': False},
+{'price': 'FLOAT', 'PrimaryKey': False, 'NotNUll': False},
+]},
+{'TabelTest': [
+{'id': 'INTEGER', 'PrimaryKey': True, 'NotNUll': True},
+{'name': 'VARCHAR(10)', 'PrimaryKey': False, 'NotNUll': False},
+]},]}

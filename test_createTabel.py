@@ -1,26 +1,34 @@
 from pybird.models.tablemodel import TableModel
-from database import Base, MySession
-
+from pybird.orm.table         import Colunm, TableTypes
+from pybird.orm.ext.migrate   import Migration
+from database import MySession
 
 
 class User(TableModel):
 
-    ID_USER:int
-    USER_NAME:str
-    USER_PASSWORD:str
-    USER_CASH:float
+    __TableName__ = "TB_USER"
 
-    def __init__(self, userName, userPassword) -> None:
-        self.ID_USER:int
-        self.USER_NAME = userName
-        self.USER_PASSWORD = userPassword
-        self.USER_CASH:float
+    id = Colunm(TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+    name = Colunm(TableTypes.VARCHAR(10))
 
-        super().__init__()
 
-    def __str__(self) -> str:
-        return "User(username= 'Duarte001', userPassword = '1234')"
-        
+class Product(TableModel):
+
+    __TableName__ = 'TB_PRODUCT'
+
+    id = Colunm(TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+    name = Colunm(TableTypes.VARCHAR(10))
+    price = Colunm(TableTypes.FLOAT())
+
+
+class TabelTest(TableModel):
+
+    id = Colunm(TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+    name = Colunm(TableTypes.VARCHAR(10))
+
+
+Migration().migrations(User,Product,TabelTest)
+Migration().makeMigrations(MySession)
 
 
 

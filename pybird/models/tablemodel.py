@@ -1,64 +1,52 @@
-
 class TableModel:
 
+    __TableName__ = None
+
     def __init__(self) -> None:
+        setattr(self,'map', self.__return_attrs())
         setattr(self,'root', self.return_name())
-        setattr(self,'map', self.return_attrs())
+
+        for attr in self.map:
+            delattr(self, attr)
         pass
-    
-    @classmethod
-    def return_name(cls):
-        return cls.__name__
 
-    @classmethod
-    def return_attrs(cls):
-        return cls.__annotations__
-
-    
-
-
-    @classmethod
-    def __create_query(cls):
-
-        list = cls.__annotations__
-        query = f'create table "{str(cls.__name__)}" ('
-        ID = ''
-        for key in list:
-            if key[0:2].upper() == 'ID':
-                ID = str(key)
-                query += f' {str(key)} {cls.to_type(list[key])} not null,'
-                query += f' constraint "PK_{str(cls.__name__)}" primary key ("{str(key)}") '
-            elif cls.to_type(list[key]) != 'None Type':
-                query += f', {str(key)} {cls.to_type(list[key])}'
-            else:
-                ...
-        
-        query += ");"
-
-
-        return query
-
-    @classmethod
-    def create_table(cls, con):
-        
-        query = cls.__create_query()
-        print(query)
-        cur = con.cursor()
-        cur.execute(query)
-        con.commit()
-        
-    
     @classmethod
     @staticmethod
     def to_type(type):
 
-        if type == int:
-            return 'Integer'
-        elif type == str:
-            return 'VARCHAR(50)'
-        elif type == float:
-            return 'FLOAT'
+        if type == "INTEGER":
+            return int
+        elif type[:7] == "VARCHAR":
+            return str
+        elif type == "FLOAT":
+            return float
         else:
             return 'None Type' 
 
+
+    @classmethod
+    def return_name(cls) -> str:
+        if cls.__TableName__ != None:
+            return cls.__TableName__
+        else:
+            return cls.__name__
+
+    @classmethod
+    def __return_attrs(cls):
+        listAttrs = cls.__dict__
+
+        attrs = {}
+        for key in listAttrs:
+            if(key[0:2] != '__'):
+                print(key)
+                print(listAttrs[key]['Type'])
+                attrs[key] = cls.to_type(listAttrs[key]['Type'])
+        return attrs
+    
+   
+        
+    
+    ...
+
+    
         
