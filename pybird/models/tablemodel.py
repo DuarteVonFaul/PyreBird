@@ -1,8 +1,9 @@
+
 class TableModel:
 
     def __init__(self) -> None:
         setattr(self,'root', self.return_name())
-        setattr(self,'map', self.return_attr())
+        setattr(self,'map', self.return_attrs())
         pass
     
     @classmethod
@@ -10,18 +11,12 @@ class TableModel:
         return cls.__name__
 
     @classmethod
-    def return_attr(cls):
+    def return_attrs(cls):
         return cls.__annotations__
+
     
-    @classmethod
-    @staticmethod
-    def auto_increment(table,ID):
-        AI = f"create generator gen_{table}_id; \n"
-        AI += f"set generator gen_{table}_id TO 0; \n"
-        AI += f"set term !! ; create trigger {table}_BI for {table} active before insert position 0 \n" 
-        AI += f"as begin if(NEW.{ID} is NULL) then NEW.{ID} = gen_id(gen_{table}_id, 1); \n"
-        AI += f"end!! set term ; !! "
-        return AI
+
+
     @classmethod
     def __create_query(cls):
 
@@ -38,14 +33,14 @@ class TableModel:
             else:
                 ...
         
-        query += "); "
-        #query += cls.auto_increment(cls.__name__, ID)
+        query += ");"
 
 
         return query
-            
+
     @classmethod
     def create_table(cls, con):
+        
         query = cls.__create_query()
         print(query)
         cur = con.cursor()
