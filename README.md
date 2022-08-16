@@ -1,4 +1,4 @@
-# PyBird 0.2.0
+# PyBird 0.3.0
 
 [![Active Development](https://img.shields.io/badge/Maintenance%20Level-Actively%20Developed-brightgreen.svg)](https://gist.github.com/cheerfulstoic/d107229326a01ff0f333a1d3476e068d)
 ![status](https://img.shields.io/badge/status-stable-brightgreen.svg)![pyversions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)
@@ -23,6 +23,12 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
       * retorna o Select em formato de Objeto
       * converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
       * retorna a query em formato de str
+      
+  * **CreateTable**
+      * Constroi um modelo de tabela apartir de um objeto
+      * Cria um arquivo migrate.txt guardando todas as informações dessa modificação
+      * Ao usar MakeMigrate atualiza o arquivo migrate.txt
+      * Cria tabelas e adiciona novos campos às tabelas
    
 
 ## 2. Dependências:
@@ -126,8 +132,50 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
                                             VDA_QUANT   = int(Item.amount),
                                             VDA_TOTAL   = float(product.PRD_PREC) * float(Item.amount)).return_quert()
            
+    - **Create Table**
+    
+      A criação de tabela no PyBird ela é pensanda da seguinte maneira
+       - Criar uma classe herdando TabelModel
+       - Utilizar as funcionalidades de Table para criar as Colunas
+       - Utilizar o TabelType para setar os tipos das Colunas
+       - Ler essas classes e gera modelos de tabelas
+       - MakeMigrations ler esses modelos e faz as requisições especificas 
+       - Ao instanciar destroi todos os campos anteriores e gera os schemas iguais do automap
+     
+      Para ficar mais claro a criação das tabelas no PyBird temos o exemplo abaixo
+      
+      
+            from pybird.models.tablemodel import TableModel
+            from pybird.orm.table         import Colunm, TableTypes
+            from pybird.orm.ext.migrate   import Migration
+            from database import MySession
+
+            class User(TableModel):
+
+                __TableName__ = "TB_USER"
+
+                id = Colunm(Type=TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+                name = Colunm(Type=TableTypes.VARCHAR(10))
+
+
+            class Product(TableModel):
+
+                __TableName__ = 'TB_PRODUCT'
+
+                id = Colunm(Type=TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+                name = Colunm(Type=TableTypes.VARCHAR(10))
+                price = Colunm(Type=TableTypes.FLOAT())
+
+
+            class TabelTest(TableModel):
+
+                id = Colunm(Type=TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
+                name = Colunm(Type=TableTypes.VARCHAR(10), NotNUll=True)
            
-           
+           #Aqui sobe as atualizações pro arquivo migrate.txt
+           Migration.migrations(User,Product, TabelTest)
+           #Aqui ler o arquivo migrate.txt e sobe as tabelas para o Banco
+           Migration.makeMigrations(MySession)
            
            
         
