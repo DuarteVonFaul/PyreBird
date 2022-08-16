@@ -1,3 +1,6 @@
+from ..utils.utils import to_dict
+
+
 class TableModel:
 
     __TableName__ = None
@@ -41,11 +44,7 @@ class TableModel:
                 print(key)
                 print(listAttrs[key]['Type'])
                 attrs[key] = cls.to_type(listAttrs[key]['Type'])
-        return attrs
-    
-   
-        
-    
+        return attrs 
     ...
 
     
