@@ -9,9 +9,7 @@ class TableModel:
         setattr(self,'map', self.__return_attrs())
         setattr(self,'root', self.return_name())
 
-        for attr in self.map:
-            delattr(self, attr)
-        pass
+        
 
     @classmethod
     @staticmethod
@@ -41,8 +39,6 @@ class TableModel:
         attrs = {}
         for key in listAttrs:
             if(key[0:2] != '__'):
-                print(key)
-                print(listAttrs[key]['Type'])
                 attrs[key] = cls.to_type(listAttrs[key]['Type'])
         return attrs 
     ...

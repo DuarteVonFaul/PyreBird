@@ -1,3 +1,7 @@
+from ast import arguments
+from email.policy import default
+
+
 def refacture_args(args):
     aux = str(args[0])
     i = 1
@@ -39,7 +43,7 @@ def convert_type(argument,campo):
        case 13      : return confirm_string(campo)  #'TIME'
        case 35      : return confirm_string(campo)  #'TIMESTAMP'
        case 37      : return confirm_string(campo)  #'VARCHAR'
-       case default : return confirm_string("Algo de errado não está certo")
+       case default : return argument(campo)
 
 def confirm_int(campo):
     try:
@@ -58,3 +62,4 @@ def confirm_string(campo):
         return str(campo)
     except:
         return None
+    

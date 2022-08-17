@@ -15,7 +15,7 @@ class DataBase():
                                 charset='ANSI')
 
 
-database = DataBase("./test/FireBird.FDB")
+database = DataBase("./tests/FireBird.FDB")
 
 MySession = database.get_engine()
 Base      = auto_map(MySession).all()

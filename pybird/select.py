@@ -1,6 +1,6 @@
-from pybird.utils.utils import convert_type,refacture_args
-from typing                 import Optional
-from pybird.models.model import Model
+from pybird.utils.utils         import convert_type,refacture_args
+from typing                     import Optional
+from pybird.models.model        import Model
 
 class Base():
     def __init__(self) -> None:
@@ -29,7 +29,6 @@ class Base():
         self.cur.execute(self.SQL)
         return self.cur.fetchone()[0]
 
-
 class Select(Base):
     SQL : str
 
@@ -39,6 +38,7 @@ class Select(Base):
         self.table = obj
         self.SQL = f'SELECT FIRST {first}' if first > 0 else 'SELECT'
         self.SQL += f' *' if len(args) <= 0 else f' ' + refacture_args(args)
+        self.SQL += f' FROM {self.table.root}'
         self.filter_column = args
 
     #Metodo para adicionar query manualmente
@@ -47,14 +47,14 @@ class Select(Base):
         self.SQL = query
         return self
 
-    #Metodo Orden By
+        #Metodo Orden By
     def orden_by(self,*args, Keyword = "Desc"):
         query = f"{self.SQL} ORDER BY"
         self.SQL = query +f" {refacture_args(args)} "+ Keyword
         return self
 
     #Retorna um unico resultado da query
-    def only(self):
+    def execute(self):
         self.cur = self.con.cursor()
         self.cur.execute(self.SQL)
         self.listObj = self.cur.fetchone()

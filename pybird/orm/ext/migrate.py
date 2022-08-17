@@ -66,7 +66,6 @@ class Migration():
                             sql += f'{k} {value[k]["Type"]}'
                             if value[k]['NotNULL'] == True:
                                 sql += ' not null,'
-                            print(sql)
                         
                         ...
                             
@@ -86,6 +85,7 @@ class Migration():
     @classmethod
     def migrations(cls, *args):
         import ast
+        import os
         sttr = ""
         try:
             with open('./migrations/migrate.txt', 'r') as arq:
@@ -93,6 +93,10 @@ class Migration():
                 dic = ast.literal_eval(text)['Tables']
                 
         except:
+            try:
+                os.mkdir('./migrations')
+            except:
+                ...
             open('./migrations/migrate.txt', 'w')
             dic = {}
         i = 0
@@ -109,14 +113,11 @@ class Migration():
 
     @classmethod
     def __create_migrations(cls, field, dic):
-        import os
+
 
         name = field.return_name()
         list = field.__dict__
-        try:
-            os.mkdir('./migrations')
-        except:
-            ...
+
         if name in dic :
             for key in list:
                 if key[:2] != '__':

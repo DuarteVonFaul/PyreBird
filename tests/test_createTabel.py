@@ -1,10 +1,7 @@
 from pybird.models.tablemodel import TableModel
 from pybird.orm.table         import Colunm, TableTypes
-from pybird.orm.ext.migrate   import Migration
-from database import MySession, Base
 
 
-print(f' \n \n Minhas Tabelas {Base.classes_keys()} \n \n')
 
 class User(TableModel):
 
@@ -12,6 +9,13 @@ class User(TableModel):
 
     id = Colunm(Type=TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
     name = Colunm(Type=TableTypes.VARCHAR(10))
+
+    def __init__(self, id, name) -> None:
+        super().__init__()
+
+        self.id     = id
+        self.name   = name
+
 
 
 class Product(TableModel):
@@ -22,11 +26,25 @@ class Product(TableModel):
     name = Colunm(Type=TableTypes.VARCHAR(10))
     price = Colunm(Type=TableTypes.FLOAT())
 
+    def __init__(self, id, name) -> None:
+        super().__init__()
+
+        self.id     = id
+        self.name   = name
+
 
 class TabelTest(TableModel):
 
     id = Colunm(Type=TableTypes.INTEGER(), PrimaryKey= True, NotNUll= True)
     name = Colunm(Type=TableTypes.VARCHAR(10), NotNUll=True)
+
+    def __init__(self, id, name) -> None:
+        super().__init__()
+
+        self.id     = id
+        self.name   = name
+
+
     
 
 
