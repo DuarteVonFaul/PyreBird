@@ -1,6 +1,6 @@
-from pybird.utils.convertType import to_type,refactureArgs
-from typing                 import Optional
-from pybird.models.model import Model
+from pybird.utils.utils         import convert_type,refacture_args
+from typing                     import Optional
+from pybird.models.model        import Model
 
 class Base():
     def __init__(self) -> None:
@@ -29,7 +29,6 @@ class Base():
         self.cur.execute(self.SQL)
         return self.cur.fetchone()[0]
 
-
 class Select(Base):
     SQL : str
 
@@ -38,7 +37,8 @@ class Select(Base):
         self.con = con
         self.table = obj
         self.SQL = f'SELECT FIRST {first}' if first > 0 else 'SELECT'
-        self.SQL += f' *' if len(args) <= 0 else f' ' + refactureArgs(args)
+        self.SQL += f' *' if len(args) <= 0 else f' ' + refacture_args(args)
+        self.SQL += f' FROM {self.table.root}'
         self.filter_column = args
 
     #Metodo para adicionar query manualmente
@@ -47,14 +47,14 @@ class Select(Base):
         self.SQL = query
         return self
 
-    #Metodo Orden By
+        #Metodo Orden By
     def orden_by(self,*args, Keyword = "Desc"):
         query = f"{self.SQL} ORDER BY"
-        self.SQL = query +f" {refactureArgs(args)} "+ Keyword
+        self.SQL = query +f" {refacture_args(args)} "+ Keyword
         return self
 
     #Retorna um unico resultado da query
-    def only(self):
+    def execute(self):
         self.cur = self.con.cursor()
         self.cur.execute(self.SQL)
         self.listObj = self.cur.fetchone()
@@ -62,12 +62,12 @@ class Select(Base):
         Obj = Model()
         if(len(self.filter_column) <= 0):
             for attr in self.table.map:
-                setattr(Obj,attr,to_type(self.table.map[attr],(self.listObj)[i]))
+                setattr(Obj,attr,convert_type(self.table.map[attr],(self.listObj)[i]))
                 i += 1
             return Obj
         else:
             for attr in self.filter_column:
-                setattr(Obj,attr,to_type(self.table.map[attr],(self.listObj)[i]))
+                setattr(Obj,attr,convert_type(self.table.map[attr],(self.listObj)[i]))
                 i += 1
             return Obj
     
@@ -83,7 +83,7 @@ class Select(Base):
                 Obj = Model()
                 i = 0
                 for attr in self.table.map:
-                    setattr(Obj,attr,to_type(self.table.map[attr],x[i]))
+                    setattr(Obj,attr,convert_type(self.table.map[attr],x[i]))
                     i += 1 
                 list.append(Obj)
                 
@@ -93,7 +93,7 @@ class Select(Base):
                 Obj = Model()
                 i = 0
                 for attr in self.filter_column:
-                    setattr(Obj,attr,to_type(self.table.map[attr],x[i]))
+                    setattr(Obj,attr,convert_type(self.table.map[attr],x[i]))
                     i += 1
                 list.append(Obj)
             
