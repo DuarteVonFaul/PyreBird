@@ -18,7 +18,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
   * **Session**
       * Cria uma sessão de conexão com o banco
 
-  * **PyBird**
+  * **PyreBird**
       * Faz as requisições basicas no banco (Select, Insert, Update e Delete)
       * retorna o Select em formato de Objeto
       * converter os tipos dos attrs aos seus respectivos tipos das colunas correspondentes
@@ -43,7 +43,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
   
     O create_session cria uma conexão para o banco de dados FireBird
           
-          from pybird.orm.session     import Create_Session
+          from pyrebird.orm.session     import Create_Session
           
           conn = Create_Session(  dsn='path/to/DATA.FDB',user='user',password='pass',charset='ANSI') 
   - **AutoMap**
@@ -51,7 +51,7 @@ Uma extensão para FDB que facilita a integração de um banco FireBird
     O AutoMap tem como funcionalidade Mapear as tabelas e criar schemas para serem usados nas consultas e nas criações de Objetos.
     Logo abaixo temos as funcionalidades Basicas do AutoMap
           
-          from pybird.orm.ext.automap     import auto_map
+          from pyrebird.orm.ext.automap     import auto_map
           
           #Retorna o mapeamento de todas as tabelas
           Base = auto_map(conn).all()
