@@ -1,4 +1,4 @@
-from pybird.models.basicmodel import BasicModel
+from pyrebird.models.basicmodel import BasicModel
 import copy
 
 
