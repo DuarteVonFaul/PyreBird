@@ -18,7 +18,7 @@ Versão 0.2
 
 Versão 0.3
 ----------
-- Criação de Tabela(s)(A partir de um Objeto)
-- atualizar campo da(s) Tabela(s)
-- deletar tabela(s)
+- Implementar modelo de DTO
+- Aperfeiçoar criação de SQL's
+- Implementar SQL embutido
 
