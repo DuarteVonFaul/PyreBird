@@ -5,6 +5,8 @@ class Update():
     def __init__(self,con, table):
         self.table = table
         self.SQL = f'UPDATE {self.table.root}'
+        self.sql_filter = ""
+        self.sql_set = ""
         self.con = con
     
     def set(self, **kwargs):
@@ -14,7 +16,7 @@ class Update():
                 query = query +  f" {key} = '{value}'"
             else:
                 query = query +  f" {key} = {value}"
-        self.SQL = query
+        self.sql_set += query
         return self
 
     def filter_by(self, **kwargs):
@@ -24,14 +26,14 @@ class Update():
                 query = query +  f" {key} = '{value}'"
             else:
                 query = query +  f" {key} = {value}"
-        self.SQL = query
+        self.sql_filter = query
         return self
     
     def is_null(self, field):
 
-        query += f"{self.SQL} WHERE {field} is null"
+        query = f"{self.SQL} WHERE {field} is null"
 
-        self.SQL = query
+        self.sql_set += query
         return self
     
     def return_query(self):
