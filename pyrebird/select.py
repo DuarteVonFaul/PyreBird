@@ -1,6 +1,6 @@
-from pybird.utils.utils         import convert_type,refacture_args
+from pyrebird.utils.utils         import convert_type,refacture_args
 from typing                     import Optional
-from pybird.models.model        import Model
+from pyrebird.models.model        import Model
 
 class Base():
     def __init__(self) -> None:
@@ -9,16 +9,18 @@ class Base():
         #Metodo Where column = value and
     def filter_by(self, **kwargs):
         query = f"{self.SQL} WHERE"
-        
-        i = 0
-        list = kwargs.items()
+        conditions = []
+        first_condition = True
         for key, value in kwargs.items():
-            if(i == 0):
-                query += f" {key} = '{value}'" if type(value) == str else f" {key} = {value}" 
-                i = 1
+            if first_condition:
+                placeholder = "'{}'" if isinstance(value, str) else "{}"
+                conditions.append(f"{key} = {placeholder.format(value)}")
+                first_condition = False
             else:
-                query += f" AND {key} = '{value}'" if type(value) == str else f" AND {key} = {value}" 
-        self.SQL = query
+                placeholder = "'{}'" if isinstance(value, str) else "{}"
+                conditions.append(f" AND {key} = {placeholder.format(value)}") 
+
+        self.SQL = f"{query} ".join(conditions)
         return self
 
     def return_query(self):
